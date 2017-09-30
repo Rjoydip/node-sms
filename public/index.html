@@ -5,11 +5,69 @@
     <title>Node.js SMS</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="css/style.css" rel="stylesheet">
+    <style>
+        body {
+            padding: 50px;
+            font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+        }
+
+        a {
+            color: #00B7FF;
+        }
+
+        li {
+            margin: 10px 0;
+        }
+    </style>
 </head>
 
 <body>
     <h3>Welcome to Node.js SMS system</h3>
+
+    Title: <input type="text" name="title" id="title" value=""> Code: <input type="text" name="code" id="code" value="">    Phone: <input type="tel" name="phone" id="phone" value="">
+    <button onclick="add()">Add</button>
+
+    <ul id="phone_book"></ul>
 </body>
+
+<script>
+    var title = document.getElementById("title");
+    var phone = document.getElementById("phone");
+    var code = document.getElementById("code");
+    var phone_book = document.getElementById("phone_book");
+
+    function sendMessage(phoneNumber) {
+        fetch("http://localhost:3000/send", {
+                method: "POST",
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    phone: "\+" + phoneNumber
+                })
+            })
+            .then(function (response) {
+                if (response.status !== 200) throw new Error();
+                response.json()
+                    .then(function (data) {
+                        console.log(data);
+                    });
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+    }
+
+    function add() {
+        var li = document.createElement('li');
+        var phone_number = code.value + phone.value;
+
+        li.innerHTML = title.value + "&nbsp;&nbsp;&nbsp;" + phone_number + "&nbsp;&nbsp;&nbsp;" +
+            "<button onclick='sendMessage(" + phone_number + ")'>Send Message</button>";
+
+        phone_book.appendChild(li);
+    }
+</script>
 
 </html>

@@ -36,7 +36,7 @@ app.get('/', function (req, res) {
   res.sendFile("index.html");
 });
 
-app.get('/send', function (req, res) {
+app.post('/send', function (req, res) {
   // Twilio Credentials 
   var accountSid = process.env.ACCOUNT_SID;
   var authToken = process.env.AUTH_TOKEN;
@@ -45,8 +45,8 @@ app.get('/send', function (req, res) {
   var client = require('twilio')(accountSid, authToken);
 
   client.messages.create({
-    to: "+918697411233",
-    from: "+15104557497",
+    to: req.body.phone,
+    from: process.env.TWILIO_NUMBER,
     body: "Text message",
   }, function (err, message) {
     if (err) res.status(422).send({

@@ -19,11 +19,17 @@ Your app should now be running on [localhost:3000](http://localhost:3000).
 
 Render index.html
 
-### `app.get('/send');`
+### `app.post('/send');`
+
+body
+
+```
+{ phone: <PHONE_NUMBER>} // whome you want to send
+```
 
 Send sms messageing with dummy twilio number.
 
 #### `Response:`
 
-* 200: Success. Payload: `message.sid`.
+* 200: Success. Payload: `sid` of sent message.
 * 422: Error. Payload: error object.
